@@ -28,7 +28,6 @@ with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(
         [
-            "index",
             "title", 
             "group"]
         )
@@ -39,8 +38,8 @@ with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
             title = (
                 WebDriverWait(driver, 2)
                 .until(EC.presence_of_element_located((By.XPATH, xpath,)))
-                .text
             )
+            # title_text = title.text
         except:
             title = ""
 
@@ -49,20 +48,25 @@ with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
             group = (
                 WebDriverWait(driver, 2)
                 .until(EC.presence_of_element_located((By.XPATH, xpath,)))
-                .text
             )
+            # group_text = group.text
         except:
             group = ""
 
         index = index + 1
 
         if title and group:
-            writer = csv.writer(csvfile)
-            writer.writerow([title, group])
+            print(title.text, group.text)
 
+            writer.writerow([title.text, group.text])
 
+        # last_height = driver.execute_script("return document.body.scrollHeight")
 
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
+        # new_height = driver.execute_script("return document.body.scrollHeight")
 
-
+        # if new_height == last_height:
+        #     break
+        # last_height = new_height
 
