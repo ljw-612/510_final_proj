@@ -26,28 +26,36 @@ index = 3
 
 with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(
-        [
-            "title", 
-            "group"]
-        )
+    writer.writerow(["title", "group"])
     while True:
-        
+
         try:
-            xpath = "/html/body/div[5]/div[2]/div/div/div[6]/div[1]/ul/li[{}]/div/div/div[2]/div/div/h3".format(index)
-            title = (
-                WebDriverWait(driver, 2)
-                .until(EC.presence_of_element_located((By.XPATH, xpath,)))
+            xpath = "/html/body/div[5]/div[2]/div/div/div[6]/div[1]/ul/li[{}]/div/div/div[2]/div/div/h3".format(
+                index
+            )
+            title = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        xpath,
+                    )
+                )
             )
             # title_text = title.text
         except:
             title = ""
 
         try:
-            xpath = "/html/body/div[5]/div[2]/div/div/div[6]/div[1]/ul/li[{}]/div/div/div[2]/div/div/div[2]".format(index)
-            group = (
-                WebDriverWait(driver, 2)
-                .until(EC.presence_of_element_located((By.XPATH, xpath,)))
+            xpath = "/html/body/div[5]/div[2]/div/div/div[6]/div[1]/ul/li[{}]/div/div/div[2]/div/div/div[2]".format(
+                index
+            )
+            group = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        xpath,
+                    )
+                )
             )
             # group_text = group.text
         except:
@@ -69,4 +77,3 @@ with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
         # if new_height == last_height:
         #     break
         # last_height = new_height
-
