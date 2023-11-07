@@ -1,65 +1,91 @@
-import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import numpy as np
+import requests
+import matplotlib.pyplot as plt
 
-# Define the URL you want to scrape
-url = "https://dukegroups.com/club_signup?group_type=9999"
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-# Send an HTTP GET request to the URL
-response = requests.get(url)
+import os
+import csv
+import time
 
-# Check if the request was successful (status code 200)
-if response.status_code == 200:
-    # Parse the HTML content of the page
-    soup = BeautifulSoup(response.text, "html.parser")
+if not os.path.exists("output"):
+    os.makedirs("output")
+driver = webdriver.Chrome()
 
-    # Initialize empty lists to store data
-    ids = []
-    names = []
-    links = []
-    tags = []
-    descriptions = []
+csv_filename = "output/data_groups.csv"
 
-    # Find the club entries on the page
-    club_entries = soup.find_all("div", class_="list-group-item")
+url = "https://dukegroups.com/club_signup?view=all&"
+driver.get(url)
+index = 3
 
-    # Loop through the club entries and extract the information
-    for club in club_entries:
-        # Extract the ID
-        club_id = club.find("div", class_="pull-right").text.strip()
+with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(["title", "link", "mission"])
+    while True:
 
-        # Extract the name
-        club_name = club.find("h4").text.strip()
+        try:
+            xpath = "/html/body/div[5]/div[2]/div/div/div[7]/ul/form/li[{}]/div/div[2]/div[1]/div[2]/h2".format(
+                index
+            )
+            title = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        xpath,
+                    )
+                )
+            )
+            # title_text = title.text
+        except:
+            title = ""
 
-        # Extract the link
-        club_link = club.find("a")["href"]
+        try:
+            xpath = "/html/body/div[5]/div[2]/div/div/div[7]/ul/form/li[{}]/div/div[2]/div[1]/div[2]/div/p[1]/a[1]".format(
+                index
+            )
+            link = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        xpath,
+                    )
+                )
+            )
+            # group_text = group.text
+        except:
+            link = ""
+        # print(link.get_attribute("href"))
+        try:
+            xpath = "/html/body/div[5]/div[2]/div/div/div[7]/ul/form/li[{}]/div/div[2]/div[1]/div[2]/div/p[3]".format(
+                index
+            )
+            # /div[1]/ul/li[{}]/div/div/div[2]/div/div/div[2]"
+            mission = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        xpath,
+                    )
+                )
+            )
+            mission_data = mission.get_attribute("innerHTML")
+            mission_text = [item.strip() for item in mission_data.split("<br>")][1]
+            # group_text = group.text
+        except:
+            mission = ""
 
-        # Extract the tag
-        club_tag = club.find("p", class_="club-list-tags").text.strip()
+        index = index + 1
 
-        # Extract the description
-        club_description = club.find("div", class_="list-group-item-text").text.strip()
+        if title and link and mission:
+            print(title.text, link.get_attribute("href"), mission_text)
 
-        # Append the data to the respective lists
-        ids.append(club_id)
-        names.append(club_name)
-        links.append(club_link)
-        tags.append(club_tag)
-        descriptions.append(club_description)
+            writer.writerow([title.text, link.get_attribute("href"), mission_text])
 
-    # Create a DataFrame from the lists
-    data = {
-        "ID": ids,
-        "Name": names,
-        "Link": links,
-        "Tag": tags,
-        "Description": descriptions,
-    }
+        # last_height = driver.execute_script("return document.body.scrollHeight")
 
-    df = pd.DataFrame(data)
-
-    # Print the DataFrame
-    print(df)
-
-else:
-    print("Failed to retrieve the webpage. Status code:", response.status_code)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
