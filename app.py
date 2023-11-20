@@ -20,15 +20,17 @@ if user_secret:
     openai.api_key = user_secret
     client = OpenAI(api_key=user_secret)
 else:
-    client = OpenAI(api_key="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")
-
+    # client = OpenAI(api_key="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")
+    client = OpenAI(
+        api_key = "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"
+        )
+    
 def load_data():
     conn = sqlite3.connect('database/database.db')
     query = "SELECT * FROM embedded_groups"
     embedded_groups = pd.read_sql_query(query, conn)
     embedded_groups = embedded_groups.drop_duplicates(subset=['Name'])
     conn.close()
-    # embedded_groups = pd.read_csv('output/embedded_groups.csv').drop_duplicates(subset=['Name'])
     return embedded_groups
 
 def search_notebook(df, search_term, n=3, pprint=True):
