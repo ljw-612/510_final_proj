@@ -9,3 +9,7 @@ pandas
 selenium
 csv
 sqlite3
+streamlit
+openai
+scitkit-learn
+python-dotenv
