@@ -6,3 +6,6 @@ requests==2.26.0
 ruff==0.0.284
 beautifulsoup4==4.10.0
 pandas
+selenium
+csv
+sqlite3
