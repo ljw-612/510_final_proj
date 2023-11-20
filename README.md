@@ -1,5 +1,6 @@
-# 510_final_proj
+# AIPI 510 Final Project
 This project achieves a centralized Duke resource database, and provides a web interface for users to search for whatever resources they want. 10 results would be return for each search term with a brief description of the resource and a link to the resource's website. 
+
 # Data Pipeline
 ## Data Collection/Scraping
  We scraped the data from the Duke websites using `selenium`. 
@@ -16,3 +17,11 @@ We used OpenAI's api to do word embedding to the scraped data. The embedding was
 ## Data Storage
 A sqlite database was created to store the data. The database contains one table named `embedded_groups` with 6 columns: `Name`, `Description`, `Type`, `Reference`, `Description_bfr_embeddings` and `ada_embedding`. The database is stored in the `database` folder.
 
+# Search Engine Building
+## Search Engine
+We built a search engine using `streamlit`. We made a Web interface where users can simply input the search term and the system will return the top 10 related resources. Each resources' types are indicated by different colors. Links to the resources' websites and possible descriptions are also provided.
+
+# Project Usage
+Nevigate to the root folder of the project and type the following command in the terminal:
+``` stremlit run app.py```
+Then the web interface will be launched in the browser.
