@@ -1,4 +1,5 @@
-#streamlit
+# streamlit
+# streamlit run app.py
 
 import streamlit as st
 import pandas as pd
@@ -7,7 +8,7 @@ import openai
 from openai import OpenAI
 
 from sklearn.metrics.pairwise import cosine_similarity
-# from openai.embeddings_utils import get_embeddings, cosine_similarity
+import sqlite3
 
 st.title("Duke Resources Search Engine")
 
@@ -18,9 +19,16 @@ user_secret = st.text_input(label = ":blue[OpenAI API Key]",
 if user_secret:
     openai.api_key = user_secret
     client = OpenAI(api_key=user_secret)
+else:
+    client = OpenAI(api_key="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")
 
 def load_data():
-    embedded_groups = pd.read_csv('output/embedded_groups.csv')
+    conn = sqlite3.connect('database/database.db')
+    query = "SELECT * FROM embedded_groups"
+    embedded_groups = pd.read_sql_query(query, conn)
+    embedded_groups = embedded_groups.drop_duplicates(subset=['Name'])
+    conn.close()
+    # embedded_groups = pd.read_csv('output/embedded_groups.csv').drop_duplicates(subset=['Name'])
     return embedded_groups
 
 def search_notebook(df, search_term, n=3, pprint=True):
@@ -52,7 +60,6 @@ def search_notebook(df, search_term, n=3, pprint=True):
 
     if pprint:
         print(result)
-    
     return result
 
 search_term = st.text_input(
@@ -65,7 +72,24 @@ search_button = st.button(label="Search", type="primary")
 if search_term:
     if search_button:
         data = load_data()
-        answer = search_notebook(data, search_term, 5, True)
+        answer = search_notebook(data, search_term, 10, True)
 
         for index, row in answer.iterrows():
-            st.write(row['similarity'][0][0], row['title'], row['link'], row['mission'])
+            st.write(row['similarity'][0][0])
+
+            if row['Type'] == 'Events':
+                st.write(f" :blue[{row['Type']}:]", row['Name'])
+            elif row['Type'] == 'Group':
+                st.write(f" :green[{row['Type']}:]", row['Name'])
+            elif row['Type'] == 'Committee':
+                st.write(f" :red[{row['Type']}:]", row['Name'])
+            elif row['Type'] == 'Service':
+                st.write(f" :orange[{row['Type']}:]", row['Name'])
+            elif row['Type'] == 'Resource':
+                st.write(f" :yellow[{row['Type']}:]", row['Name'])
+            elif row['Type'] == 'Board':
+                st.write(f" :purple[{row['Type']}:]", row['Name'])
+
+            st.write(row['Reference'])
+            st.write(row['Description'])
+            st.write("-------------------------------------------")
