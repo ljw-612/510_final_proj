@@ -23,5 +23,7 @@ We built a search engine using `streamlit`. We made a Web interface where users 
 
 # Project Usage
 Nevigate to the root folder of the project and type the following command in the terminal:
-``` stremlit run app.py```
+``` 
+stremlit run app.py
+```
 Then the web interface will be launched in the browser.
