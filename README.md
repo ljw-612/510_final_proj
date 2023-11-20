@@ -22,6 +22,11 @@ A sqlite database was created to store the data. The database contains one table
 We built a search engine using `streamlit`. We made a Web interface where users can simply input the search term and the system will return the top 10 related resources. Each resources' types are indicated by different colors. Links to the resources' websites and possible descriptions are also provided.
 
 # Project Usage
+You should obtain a OpenAI API key before running the project. The key should be stored `.env` file under the root folder of the project. The `.env` file should look like this:
+```
+# Once you add your API key below, make sure to not share it with anyone! The API key should remain private.
+OPENAI_API_KEY=abc123
+```
 Nevigate to the root folder of the project and type the following command in the terminal:
 ``` 
 $ stremlit run app.py
