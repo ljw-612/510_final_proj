@@ -23,8 +23,11 @@ We built a search engine using `streamlit`. We made a Web interface where users 
 
 # Project Usage
 We included a Makefile and a requirements.txt to install all of the dependencies and assist in formating the code.
+
       - Install: install dependencies
+
       - Format: formats the code using black
+      
       - All: performs all
 
 
