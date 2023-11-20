@@ -1,6 +1,5 @@
 # streamlit
 # streamlit run app.py
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,21 +8,8 @@ from openai import OpenAI
 
 from sklearn.metrics.pairwise import cosine_similarity
 import sqlite3
-
-st.title("Duke Resources Search Engine")
-
-user_secret = st.text_input(label = ":blue[OpenAI API Key]",
-                            placeholder = "Paste your OpenAI API key here",
-                            type = "password")
-
-if user_secret:
-    openai.api_key = user_secret
-    client = OpenAI(api_key=user_secret)
-else:
-    # client = OpenAI(api_key="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")
-    client = OpenAI(
-        api_key = "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"
-        )
+import os
+from dotenv import load_dotenv
     
 def load_data():
     conn = sqlite3.connect('database/database.db')
@@ -33,7 +19,7 @@ def load_data():
     conn.close()
     return embedded_groups
 
-def search_notebook(df, search_term, n=3, pprint=True):
+def search_notebook(df, search_term, n=3, pprint=True, client=None):
     """
     Search for the most similar notes in the dataframe `df` to the search term `search_term`.
 
@@ -64,34 +50,51 @@ def search_notebook(df, search_term, n=3, pprint=True):
         print(result)
     return result
 
-search_term = st.text_input(
-    label = ":blue[Search]",
-    placeholder="Please, search my notebook with..."
-)
+def main():
+    st.title("Duke Resources Search Engine")
 
-search_button = st.button(label="Search", type="primary")
+    user_secret = st.text_input(label = ":blue[OpenAI API Key]",
+                                placeholder = "Paste your OpenAI API key here",
+                                type = "password")
 
-if search_term:
-    if search_button:
-        data = load_data()
-        answer = search_notebook(data, search_term, 10, True)
+    if user_secret:
+        openai.api_key = user_secret
+        client = OpenAI(api_key=user_secret)
+    else:
+        load_dotenv()
+        client = OpenAI(
+            api_key=os.getenv('OPENAI_API_KEY')
+            )
 
-        for index, row in answer.iterrows():
-            st.write(row['similarity'][0][0])
+    search_term = st.text_input(
+        label = ":blue[Search]",
+        placeholder="Please, search my notebook with..."
+    )
 
-            if row['Type'] == 'Events':
-                st.write(f" :blue[{row['Type']}:]", row['Name'])
-            elif row['Type'] == 'Group':
-                st.write(f" :green[{row['Type']}:]", row['Name'])
-            elif row['Type'] == 'Committee':
-                st.write(f" :red[{row['Type']}:]", row['Name'])
-            elif row['Type'] == 'Service':
-                st.write(f" :orange[{row['Type']}:]", row['Name'])
-            elif row['Type'] == 'Resource':
-                st.write(f" :yellow[{row['Type']}:]", row['Name'])
-            elif row['Type'] == 'Board':
-                st.write(f" :purple[{row['Type']}:]", row['Name'])
+    search_button = st.button(label="Search", type="primary")
 
-            st.write(row['Reference'])
-            st.write(row['Description'])
-            st.write("-------------------------------------------")
+    if search_term:
+        if search_button:
+            data = load_data()
+            answer = search_notebook(data, search_term, 10, True, client)
+
+            for index, row in answer.iterrows():
+                st.write(row['similarity'][0][0])
+
+                if row['Type'] == 'Events':
+                    st.write(f" :blue[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Group':
+                    st.write(f" :green[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Committee':
+                    st.write(f" :red[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Service':
+                    st.write(f" :orange[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Resource':
+                    st.write(f" :yellow[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Board':
+                    st.write(f" :purple[{row['Type']}:]", row['Name'])
+
+                st.write(row['Reference'])
+                st.write(row['Description'])
+                st.write("-------------------------------------------")
+main()
