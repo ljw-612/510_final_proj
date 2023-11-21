@@ -9,10 +9,10 @@ Websites we scraped:
 - https://dukegroups.com/events
 - https://students.duke.edu/belonging/get-involved/student-organizations/
 
-Data was well cleaned and organized, null values are filled to the best extent and duplicated values are droped. Finally we obtained a dataset containing xxx rows and each row contains information: `Tilte`, `Reference`, `Type`, and `Description`. Corresponding code can be found under the `data_scrape` folder.
+Data was well cleaned and organized, null values are filled to the best extent and duplicated values are droped. Finally we obtained a dataset containing xxx rows and each row contains information: `Tilte`, `Reference`, `Type`, and `Description`. Corresponding code can be found under the `data_scrape` folder. See these three files: `duke_events.py`, `duke_groups.py`, `others.py`.
 
 ## Data Embedding
-We used OpenAI's api to do word embedding to the scraped data. The embedding was done on the combination of `Tilte`, `Reference`, `Type` columns. By doing so, we converted text data into vectors, which can be used for further analysis. 
+We used OpenAI's api to do word embedding to the scraped data. The embedding was done on the combination of `Tilte`, `Reference`, `Type` columns. By doing so, we converted text data into vectors, which can be used for further analysis. Check out the embedding.py file under the `data_scrape` folder for more details.
 
 ## Data Storage
 A sqlite database was created to store the data. The database contains one table named `embedded_groups` with 6 columns: `Name`, `Description`, `Type`, `Reference`, `Description_bfr_embeddings` and `ada_embedding`. The database is stored in the `database` folder.
@@ -43,3 +43,32 @@ Nevigate to the root folder of the project and type the following command in the
 $ stremlit run app.py
 ```
 Then the web interface will be launched in the browser.
+
+## Project structure:
+```bash
+├── Makefile
+├── README.md
+├── app.py
+├── data_scrape
+│   ├── classification.py
+│   ├── duke_events.ipynb
+│   ├── duke_events.py
+│   ├── duke_groups.ipynb
+│   ├── duke_groups.py
+│   ├── embedding.ipynb
+│   ├── embedding.py
+│   ├── others.ipynb
+│   └── others.py
+├── database
+│   ├── database.db
+│   └── database_builder.py
+├── output
+│   ├── FullDF.csv
+│   ├── data_events.csv
+│   ├── data_groups.csv
+│   ├── embedded_groups.csv
+│   └── phonebook.xlsx
+├── requirements.txt
+├── tree.md
+└── venv
+```

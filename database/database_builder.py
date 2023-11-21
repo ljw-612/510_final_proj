@@ -3,12 +3,10 @@ import csv
 import pandas as pd
 
 class DatabaseBuilder:
-
     """
     This class built a sqlite3 database from the csv files `embedded_groups.csv`, which contains the embedded
     results for all the duke resources.
     """
-
     @staticmethod
     def main(db_name, csv_files):
         DatabaseBuilder.create_data_base(db_name, csv_files)

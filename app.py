@@ -34,9 +34,6 @@ def search_notebook(df, search_term, n=3, pprint=True, client=None):
     """
     # search_terms = [Sports, Spiritual or Religious, Health, Wellness, Women, Food, Career, Climate, Education, Black, Community]
     # search_terms_len = [214, 65, 139, 137, 7, 117, 180, 11, 155, 12, 424]
-    # search_terms = ['climate', 'sports', 'education', 'food', 'academic', 'club', 'support', 'career']
-    # search_terms_len = [11, 116, 85, 51, 151, 140, 8, 64]
-
 
     threshold = 0.78
     df['ada_embedding'] = df['ada_embedding'].apply(eval).apply(np.array)
@@ -56,8 +53,8 @@ def search_notebook(df, search_term, n=3, pprint=True, client=None):
     )
 
     if pprint:
-        # print(result)
-        print(len(df_thres))
+        print(result)
+        # print(len(df_thres))
 
     return result
 
@@ -101,9 +98,11 @@ def main():
                 elif row['Type'] == 'Service':
                     st.write(f" :orange[{row['Type']}:]", row['Name'])
                 elif row['Type'] == 'Resource':
-                    st.write(f" :yellow[{row['Type']}:]", row['Name'])
+                    st.write(f" :red[{row['Type']}:]", row['Name'])
                 elif row['Type'] == 'Board':
                     st.write(f" :purple[{row['Type']}:]", row['Name'])
+                elif row['Type'] == 'Phone':
+                    st.write(f" :orange[{row['Type']}:]", row['Name'])
 
                 st.write(row['Reference'])
                 st.write(row['Description'])
