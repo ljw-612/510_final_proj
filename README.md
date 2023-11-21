@@ -9,7 +9,15 @@ Websites we scraped:
 - https://dukegroups.com/events
 - https://students.duke.edu/belonging/get-involved/student-organizations/
 
-Data was well cleaned and organized, null values are filled to the best extent and duplicated values are droped. Finally we obtained a dataset containing xxx rows and each row contains information: `Tilte`, `Reference`, `Type`, and `Description`. Corresponding code can be found under the `data_scrape` folder. See these three files: `duke_events.py`, `duke_groups.py`, `others.py`.
+Data was well cleaned and organized, null values are filled to the best extent and duplicated values are droped. Finally we obtained a dataset containing 1000+ rows and each row contains information: `Tilte`, `Reference`, `Type`, and `Description`. Corresponding code can be found under the `data_scrape` folder. See these three files: `duke_events.py`, `duke_groups.py`, `others.py`.
+
+## Data Labels
+We wanted to performing classification on the data to create tags per row, so that in the search engine based on tags we can filter data. Hence, we started with `Sports` & `Spiritual or Religious` Tag. Manually created Data Labels for rows. 
+Process: Removed stop words from Description of each row using nltk library. Then converted to Vectorized format using TfidfVectorizer. Then, used a Logistic Regression for classification of them into Sports or Not. Similarly if it is related to `Spiritual or Religious` Tag or not.
+Conclusion: 
+1. There were about 50 rows related to Sports out of 1000+ rows, hence the classification was resulting in all '0'.
+2. About 400 were about Spiritual or Religious, hence the classification of it was better.
+3. However, realized it is not possible to manually create labels for every condition & create a model for Search Engine. Hence, went with embeddings method described below. 
 
 ## Data Embedding
 We used OpenAI's api to do word embedding to the scraped data. The embedding was done on the combination of `Tilte`, `Reference`, `Type` columns. By doing so, we converted text data into vectors, which can be used for further analysis. Check out the embedding.py file under the `data_scrape` folder for more details.
