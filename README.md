@@ -13,7 +13,7 @@ Data was well cleaned and organized, null values are filled to the best extent a
 
 ## Data Labels
 We wanted to performing classification on the data to create tags per row, so that in the search engine based on tags we can filter data. Hence, we started with `Sports` & `Spiritual or Religious` Tag. Manually created Data Labels for rows. 
-Process: Removed stop words from Description of each row using nltk library. Then converted to Vectorized format using TfidfVectorizer. Then, used a Logistic Regression for classification of them into Sports or Not. Similarly if it is related to `Spiritual or Religious` Tag or not.
+Process: Removed stop words from Description of each row using nltk library. Then converted to Vectorized format using TfidfVectorizer. Then, used a Logistic Regression for classification of them into Sports or Not. Similarly if it is related to `Spiritual or Religious` Tag or not. Its part of Classification in dataScraping_Experimentation folder
 Conclusion: 
 1. There were about 50 rows related to Sports out of 1000+ rows, hence the classification was resulting in all '0'.
 2. About 400 were about Spiritual or Religious, hence the classification of it was better.
