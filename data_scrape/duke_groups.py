@@ -16,9 +16,7 @@ import time
 def main():
     """
     This function scrapes the groups data (what groups Duke has and their information) from the Duke eventlist website.
-
     """
-
     if not os.path.exists("output"):
         os.makedirs("output")
     driver = webdriver.Chrome()

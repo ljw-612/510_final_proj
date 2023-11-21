@@ -32,7 +32,13 @@ def search_notebook(df, search_term, n=3, pprint=True, client=None):
     Returns:
         pd.DataFrame: The top n results.
     """
-    
+    # search_terms = [Sports, Spiritual or Religious, Health, Wellness, Women, Food, Career, Climate, Education, Black, Community]
+    # search_terms_len = [214, 65, 139, 137, 7, 117, 180, 11, 155, 12, 424]
+    # search_terms = ['climate', 'sports', 'education', 'food', 'academic', 'club', 'support', 'career']
+    # search_terms_len = [11, 116, 85, 51, 151, 140, 8, 64]
+
+
+    threshold = 0.78
     df['ada_embedding'] = df['ada_embedding'].apply(eval).apply(np.array)
 
     model = "text-embedding-ada-002"
@@ -41,13 +47,18 @@ def search_notebook(df, search_term, n=3, pprint=True, client=None):
 
     df['similarity'] = df['ada_embedding'].apply(lambda x: cosine_similarity(x.reshape(1,-1), search_embedding))
 
+    df_thres = df[df['similarity'] > threshold]
+
+
     result = (
         df.sort_values(by='similarity', ascending=False)
         .head(n)
     )
 
     if pprint:
-        print(result)
+        # print(result)
+        print(len(df_thres))
+
     return result
 
 def main():
